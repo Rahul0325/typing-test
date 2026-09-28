@@ -894,6 +894,13 @@
   // ignored in any field, while the oath is on screen (those keys belong to the
   // sneaky typing test), with modifiers held, or while the panel is open.
   let keyBuf = "";
+  const ZHOPA_LINES = [
+    "Natallia! Language! Tsk tsk tsk.",
+    "Again?? Tsk tsk tsk tsk tsk.",
+    "Clearly you've practised that one. Now type the actual test.",
+    "The ghost is telling your mum.",
+  ];
+  let zhopas = 0;
   addEventListener("keydown", (e) => {
     if (e.key.length !== 1 || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
     const t = e.target;
@@ -907,6 +914,10 @@
     if (keyBuf.endsWith("boo")) { keyBuf = ""; peek("boo!", () => found("peek")); }
     else if (keyBuf.endsWith("kiwi")) { keyBuf = ""; kiwi(() => found("kiwi")); }
     else if (keyBuf.endsWith("mango")) { keyBuf = ""; mango(() => found("mango")); }
+    else if (keyBuf.endsWith("zhopa") || keyBuf.endsWith("жопа")) {
+      keyBuf = "";
+      toast(ZHOPA_LINES[Math.min(zhopas++, ZHOPA_LINES.length - 1)], "Language");
+    }
   });
 
   /* ------------------------------------------------------------------
@@ -933,7 +944,7 @@
      Easter egg: tab title
      ------------------------------------------------------------------ */
   const baseTitle = document.title;
-  const awayTitles = ["👻 come back…", "🍵 the matcha is getting cold", "👻 booooo"];
+  const awayTitles = ["come back…", "the matcha is getting cold", "booooo"];
   let awayIdx = 0;
   document.addEventListener("visibilitychange", () => {
     document.title = document.hidden ? awayTitles[awayIdx++ % awayTitles.length] : baseTitle;
